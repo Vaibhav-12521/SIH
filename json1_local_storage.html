@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="file"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #5cb85c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        .user-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 250px;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .user-card img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .user-card h3 {
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .user-card p {
+            font-size: 14px;
+            color: #666;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        .user-card hr {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: red;
+            background: none;
+            border: none;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 5px;
+            color: #007bff;
+            background: none;
+            border: none;
+        }
+
+        .meta-id-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .meta-id {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 200px;  /* Ensure the meta ID doesn't overflow */
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #007bff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #userList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>User Management</h1>
+
+        <!-- Form for adding a new user -->
+        <h2>Add New User</h2>
+        <form id="addUserForm">
+            <label for="name">Name: </label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="meta_id">Meta ID: </label>
+            <input type="text" id="meta_id" name="meta_id" required>
+            
+            <label for="profile_picture">Profile Picture: </label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required>
+            
+            <button type="submit">Add User</button>
+        </form>
+
+        <!-- Error message -->
+        <div id="errorMessage" class="error"></div>
+
+        <h2>User List</h2>
+        <div id="userList"></div>
+    </div>
+
+    <script>
+        // Initial sample data
+        const initialData = {
+            "users": [
+                {
+                    "name": "Vaibhav Sngh",
+                    "meta_id": "0x7683D5b754b165f6a09ca237Eb7c8c3ab1BD2561",
+                    "profile_picture": "vaibhav.png",
+                    "transactions": {
+                        "send": [],
+                        "receive": []
+                    }
+                },
+                {
+                    "name": "Sajal Srivastava",
+                    "meta_id": "0x7b1b0772ed9869cbecb439a9365d7231bd321b17",
+                    "profile_picture": "sajal.jpg",
+                    "transactions": {
+                        "send": [],
+                        "receive": []
+                    }
+                }
+            ]
+        };
+
+        // Check if data exists in localStorage, else use initialData
+        const getData = () => {
+            const savedData = localStorage.getItem('userData');
+            return savedData ? JSON.parse(savedData) : initialData;
+        };
+
+        const setData = (data) => {
+            localStorage.setItem('userData', JSON.stringify(data));
+        };
+
+        // Display all users
+        const displayUsers = () => {
+            const data = getData();
+            const userListDiv = document.getElementById('userList');
+            userListDiv.innerHTML = '';
+            data.users.forEach((user, index) => {
+                userListDiv.innerHTML += `
+                    <div class="user-card" data-index="${index}">
+                        <button class="delete-btn" onclick="deleteUser(${index})">🗑️</button>
+                        <img src="${user.profile_picture}" alt="Profile">
+                        <h3>${user.name}</h3>
+                        <div class="meta-id-container">
+                            <p class="meta-id">${user.meta_id}</p>
+                            <button class="copy-btn" onclick="copyMetaId('${user.meta_id}')">📋</button>
+                        </div>
+                        <hr>
+                        <p><strong>Transactions:</strong></p>
+                        <p>Send: ${user.transactions.send.length ? user.transactions.send.join(', ') : 'No transactions'}</p>
+                        <p>Receive: ${user.transactions.receive.length ? user.transactions.receive.join(', ') : 'No transactions'}</p>
+                    </div>
+                `;
+            });
+        };
+
+        // Handle form submission to add a new user
+        const addUser = (event) => {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const meta_id = document.getElementById('meta_id').value;
+            const profile_picture = document.getElementById('profile_picture').files[0]?.name; // Get the file name
+
+            // Validate input
+            if (!name || !meta_id || !profile_picture) {
+                document.getElementById('errorMessage').innerText = 'All fields are required.';
+                return;
+            }
+
+            const newUser = {
+                name: name,
+                meta_id: meta_id,
+                profile_picture: profile_picture,
+                transactions: {
+                    send: [],
+                    receive: []
+                }
+            };
+
+            const data = getData();
+            data.users.push(newUser);
+            setData(data);
+            displayUsers(); // Refresh the user list
+            document.getElementById('addUserForm').reset(); // Reset form fields
+            document.getElementById('errorMessage').innerText = ''; // Clear any error messages
+        };
+
+        // Handle deletion of user
+        const deleteUser = (index) => {
+            const data = getData();
+            data.users.splice(index, 1); // Remove user from the array
+            setData(data); // Update localStorage
+            displayUsers(); // Refresh the user list
+        };
+
+        // Copy Meta ID to clipboard
+        const copyMetaId = (metaId) => {
+            navigator.clipboard.writeText(metaId).then(() => {
+                alert("Meta ID copied to clipboard!");
+            }).catch(err => {
+                console.error("Error copying text: ", err);
+            });
+        };
+
+        // Event listener for form submission
+        document.getElementById('addUserForm').addEventListener('submit', addUser);
+
+        // Initialize
+        displayUsers();
+    </script>
+</body>
+</html>

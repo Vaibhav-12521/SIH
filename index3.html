@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popular Networks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(vaibhav.png);
+            background-size: cover;
+            color: rgba(0,0,0, .3);
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .network-container {
+            width: 400px;
+            background-color: trans;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: -8px -8px 15px rgba(191, 175, 175, 0.7),
+                10px 10px 10px rgba(0,0,0, .3),
+                inset 8px 8px 15px rgba(53, 47, 47, 0.7),
+                inset 10px 10px 10px rgba(0,0,0, .3);
+            backdrop-filter: blur(3px);
+        }
+        .network-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .network-header h2 {
+            font-size: 18px;
+            color: #;
+        }
+        .network-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #2A2A2A;
+            box-shadow: -8px -8px 15px rgba(34, 32, 32, 0.7),
+                10px 10px 10px rgba(0,0,0, .3),
+                inset 8px 8px 15px rgba(53, 47, 47, 0.7),
+                inset 10px 10px 10px rgba(0,0,0, .3);
+        }
+        .network-item:hover {
+            background-color: #333;
+            cursor: pointer;
+        }
+        .network-left {
+            display: flex;
+            align-items: center;
+        }
+        .network-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #fff;
+        }
+        .network-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .network-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .network-status {
+            font-size: 14px;
+            color: #888;
+        }
+        .network-right {
+            text-align: right;
+        }
+        .network-value {
+            font-size: 14px;
+        }
+        .network-change {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .positive {
+            color: #4CAF50;
+        }
+        .negative {
+            color: #F44336;
+        }
+        @media (max-width: 600px) {
+            .network-container {
+                width: 90%; /* Allows the container to take more width on smaller screens */
+            }
+
+            .network-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .network-right {
+                text-align: left;
+                margin-top: 0;
+                margin-left: 10px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="network-container">
+        <div class="network-header">
+            <h2>Popular Networks</h2>
+            <button style="background:none; border:none; color:#ccc; font-size:14px; cursor:pointer;">Filter</button>
+        </div>
+
+        <!-- Ethereum -->
+        <div class="network-item" id="ethereum-card">
+            <div class="network-left">
+                <div class="network-icon">Ξ</div>
+                <div class="network-info">
+                    <div class="network-name">Ethereum</div>
+                    <div class="network-status">Stake 🌱</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="eth-change">Loading...</div>
+                <div class="network-value" id="eth-value">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Bitcoin -->
+        <div class="network-item" id="bitcoin-card">
+            <div class="network-left">
+                <div class="network-icon">₿</div>
+                <div class="network-info">
+                    <div class="network-name">Bitcoin</div>
+                    <div class="network-status">Active</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="btc-change">Loading...</div>
+                <div class="network-value" id="btc-value">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Litecoin -->
+        <div class="network-item" id="litecoin-card">
+            <div class="network-left">
+                <div class="network-icon">L</div>
+                <div class="network-info">
+                    <div class="network-name">Litecoin</div>
+                    <div class="network-status">Standard</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="ltc-change">Loading...</div>
+                <div class="network-value" id="ltc-value">Loading...</div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        const coins = [
+            { id: "ethereum", elementPrefix: "eth" },
+            { id: "bitcoin", elementPrefix: "btc" },
+            { id: "litecoin", elementPrefix: "ltc" },
+        ];
+
+        async function fetchCoinData(coin) {
+            const apiUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coin.id}`;
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                if (data.length > 0) {
+                    const coinData = data[0];
+                    const currentPrice = coinData.current_price.toFixed(2);
+                    const percentageChange = coinData.price_change_percentage_24h.toFixed(2);
+
+                    // Update UI
+                    document.getElementById(`${coin.elementPrefix}-value`).innerText = `$${currentPrice}`;
+                    document.getElementById(`${coin.elementPrefix}-change`).innerHTML = `
+                        <span class="${percentageChange >= 0 ? 'positive' : 'negative'}">
+                            ${percentageChange}%
+                        </span>`;
+                }
+            } catch (error) {
+                console.error(`Error fetching ${coin.id} data:`, error);
+                document.getElementById(`${coin.elementPrefix}-value`).innerText = 'Failed to load';
+                document.getElementById(`${coin.elementPrefix}-change`).innerText = 'N/A';
+            }
+        }
+
+        function updateAllCoins() {
+            coins.forEach(fetchCoinData);
+        }
+
+        // Initial Fetch
+        updateAllCoins();
+
+        // Auto-refresh every 10 seconds
+        setInterval(updateAllCoins, 10000);
+    </script>
+
+</body>
+</html>

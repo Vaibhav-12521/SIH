@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Connect</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            overflow-wrap: break-word;  /* Ensures long words break to avoid overflow */
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .connected-profile {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .hide {
+            display: none;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 600px) {
+            .btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            .popup {
+                padding: 15px;
+                width: 90%;
+            }
+            #profile {
+                font-size: 12px;  /* Adjust font size for better responsiveness */
+            }
+        }
+
+        @media (min-width: 601px) {
+            .popup {
+                width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="showPopupBtn" class="btn">Connect to MetaMask</button>
+
+    <div class="popup" id="popup">
+        <h2>MetaMask Connection</h2>
+        <button class="btn" id="connectBtn">Connect</button>
+        <div id="status" class="hide">
+            <p id="profile"></p>
+            <button class="btn" id="disconnectBtn">Disconnect</button>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const showPopupBtn = document.getElementById('showPopupBtn');
+        const popup = document.getElementById('popup');
+        const connectBtn = document.getElementById('connectBtn');
+        const statusDiv = document.getElementById('status');
+        const profile = document.getElementById('profile');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+
+        // Show the popup when the button is clicked
+        showPopupBtn.addEventListener('click', () => {
+            popup.style.display = 'block';
+        });
+
+        // Connect to MetaMask when the connect button is clicked
+        connectBtn.addEventListener('click', async () => {
+            if (window.ethereum) {
+                try {
+                    // Request account access
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    
+                    // Get the account address
+                    const userAddress = accounts[0];
+
+                    // Show the connected profile
+                    profile.textContent = `Connected: ${userAddress}`;
+                    statusDiv.classList.remove('hide');
+                    connectBtn.classList.add('hide');
+                } catch (err) {
+                    console.error('Error connecting to MetaMask:', err);
+                }
+            } else {
+                alert('MetaMask is not installed!');
+            }
+        });
+
+        // Disconnect from MetaMask (this will just hide the profile and reset)
+        disconnectBtn.addEventListener('click', () => {
+            profile.textContent = '';
+            statusDiv.classList.add('hide');
+            connectBtn.classList.remove('hide');
+        });
+    </script>
+
+</body>
+</html>

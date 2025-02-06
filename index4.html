@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .navbar .nav-links a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        /* Icon Animation */
+        section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        section .row {
+            position: relative;
+            width: 100%;
+            display: flex;
+            font-size: 10vw;
+            white-space: nowrap;
+            justify-content: center;
+            margin: 2vh 0;
+            transform: rotate(-30deg);
+        }
+
+        section .row div {
+            animation: animate 80s linear infinite;
+            animation-delay: -80s;
+        }
+
+        section .row div:nth-child(2) {
+            animation: animate2 80s linear infinite;
+            animation-delay: -40s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes animate2 {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-200%);
+            }
+        }
+
+        i {
+            color: rgba(0, 0, 0, 0.5);
+            transition: 1s;
+            user-select: none;
+            cursor: default;
+            padding: 0px 5px;
+        }
+
+        i.glowing {
+            color: #0f0;
+            text-shadow: 0 0 150px #0f0;
+            transition: 0s;
+        }
+
+        i:hover {
+            transition: 0s;
+            color: #0f0;
+            text-shadow: 0 0 150px #0f0;
+        }
+
+        /* Network Card Styling */
+        .network-container {
+            width: 400px;
+            background-color: transparent;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: -8px -8px 15px rgba(191, 175, 175, 0.7),
+                        10px 10px 10px rgba(0, 0, 0, 0.3),
+                        inset 8px 8px 15px rgba(53, 47, 47, 0.7),
+                        inset 10px 10px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(3px);
+        }
+
+        .network-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .network-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #2A2A2A;
+            box-shadow: -8px -8px 15px rgba(34, 32, 32, 0.7),
+                        10px 10px 10px rgba(0, 0, 0, 0.3),
+                        inset 8px 8px 15px rgba(53, 47, 47, 0.7),
+                        inset 10px 10px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .network-item:hover {
+            background-color: #333;
+            cursor: pointer;
+        }
+
+        .network-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .network-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .network-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .network-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .network-status {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .network-right {
+            text-align: right;
+        }
+
+        .network-value {
+            font-size: 14px;
+        }
+
+        .network-change {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .positive {
+            color: #4CAF50;
+        }
+
+        .negative {
+            color: #F44336;
+        }
+
+        @media (max-width: 600px) {
+            .network-container {
+                width: 90%; 
+            }
+
+            .network-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .network-right {
+                text-align: left;
+                margin-top: 0;
+                margin-left: 10px;
+            }
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            overflow-wrap: break-word;  /* Ensures long words break to avoid overflow */
+            z-index: 1000; /* Ensure the popup appears in front of other elements */
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .connected-profile {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .hide {
+            display: none;
+        }
+        /* Style for the close button (cross icon) */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #f44336;  /* Red color on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+<div class="navbar">
+    <div class="nav-links">
+        <a href="#Home">Home</a>
+        <a href="#Send">Send & Receive</a>
+        <div id="profileBtn" class="cursor-pointer text-white hover:bg-gray-600 py-2 px-4 rounded">Profile</div> <!-- Changed this to div -->
+    </div>
+</div>
+
+<!-- Popup for MetaMask -->
+<!-- Popup for MetaMask -->
+<div class="popup" id="popup">
+    <span class="close-btn" id="closePopup">&times;</span> <!-- Cross icon to close the popup -->
+    <h2>MetaMask Connection</h2>
+    <button class="btn" id="connectBtn">Connect</button>
+    <div id="status" class="hide">
+        <p id="profile"></p>
+        <button class="btn" id="disconnectBtn">Disconnect</button>
+    </div>
+</div>
+
+
+<script>
+// Get DOM elements
+const profileBtn = document.getElementById('profileBtn');  // Profile button in navbar
+const popup = document.getElementById('popup');
+const connectBtn = document.getElementById('connectBtn');
+const statusDiv = document.getElementById('status');
+const profile = document.getElementById('profile');
+const disconnectBtn = document.getElementById('disconnectBtn');
+const closePopupBtn = document.getElementById('closePopup');  // Close button (cross icon)
+
+// Show the popup when the profile button is clicked
+profileBtn.addEventListener('click', () => {
+    popup.style.display = 'block';
+});
+
+// Close the popup when the cross icon is clicked
+closePopupBtn.addEventListener('click', () => {
+    popup.style.display = 'none';  // Hide the popup
+});
+
+// Flag to prevent multiple requests
+let isProcessing = false;
+
+// Connect to MetaMask when the connect button is clicked
+connectBtn.addEventListener('click', async () => {
+    if (window.ethereum) {
+        if (isProcessing) {
+            console.log('Request is already in progress');
+            return; // If a request is already in progress, do nothing
+        }
+
+        try {
+            isProcessing = true; // Set flag to indicate a request is in progress
+            connectBtn.disabled = true; // Disable the button to prevent multiple clicks
+
+            console.log("MetaMask is available");
+
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            
+            if (accounts && accounts.length > 0) {
+                // Get the account address
+                const userAddress = accounts[0];
+
+                // Show the connected profile
+                profile.textContent = `Connected: ${userAddress}`;
+                statusDiv.classList.remove('hide');
+                connectBtn.classList.add('hide');
+
+                // Close the popup after successful connection
+                popup.style.display = 'none';  // Hide the popup
+            } else {
+                alert('No account found. Please check your MetaMask extension.');
+            }
+        } catch (err) {
+            console.error('Error connecting to MetaMask:', err);
+            alert("Connection error: " + err.message);  // Alert the error
+        } finally {
+            isProcessing = false; // Reset the flag
+            connectBtn.disabled = false; // Re-enable the button
+        }
+    } else {
+        alert('MetaMask is not installed!');
+    }
+});
+
+// Disconnect from MetaMask (this will just hide the profile and reset the UI)
+disconnectBtn.addEventListener('click', () => {
+    // Clear the profile text
+    profile.textContent = '';
+    
+    // Hide the connected profile and show the connect button
+    statusDiv.classList.add('hide');
+    connectBtn.classList.remove('hide');
+
+    // Optionally, show a message or alert confirming disconnection
+    alert('Disconnected from MetaMask!');
+    
+    // Close the popup (optional)
+    popup.style.display = 'none';
+});
+
+</script>
+    <!-- Section with Icons -->
+    <section>
+        <!-- First Row of Icons -->
+        <div class="row">
+            <div>
+                <i class="fa fa-bath" aria-hidden="true"></i>
+                <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                <i class="fa fa-meetup" aria-hidden="true"></i>
+                <i class="fa fa-quora" aria-hidden="true"></i>
+                <i class="fa fa-shower" aria-hidden="true"></i>
+                <i class="fa fa-asterisk" aria-hidden="true"></i>
+                <i class="fa fa-bell-slash" aria-hidden="true"></i>
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                <i class="fa fa-hand-lizard-o" aria-hidden="true"></i>
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                <i class="fa fa-youtube" aria-hidden="true"></i>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Popular Networks Card -->
+    <div class="network-container" id="network-card">
+        <div class="network-header">
+            <h2>Popular Networks</h2>
+            <button style="background:none; border:none; color:#ccc; font-size:14px; cursor:pointer;">Filter</button>
+        </div>
+
+        <!-- Ethereum -->
+        <div class="network-item" id="ethereum-card">
+            <div class="network-left">
+                <div class="network-icon">Ξ</div>
+                <div class="network-info">
+                    <div class="network-name">Ethereum</div>
+                    <div class="network-status">Stake 🌱</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="eth-change">Loading...</div>
+                <div class="network-value" id="eth-value">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Bitcoin -->
+        <div class="network-item" id="bitcoin-card">
+            <div class="network-left">
+                <div class="network-icon">₿</div>
+                <div class="network-info">
+                    <div class="network-name">Bitcoin</div>
+                    <div class="network-status">Active</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="btc-change">Loading...</div>
+                <div class="network-value" id="btc-value">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Litecoin -->
+        <div class="network-item" id="litecoin-card">
+            <div class="network-left">
+                <div class="network-icon">L</div>
+                <div class="network-info">
+                    <div class="network-name">Litecoin</div>
+                    <div class="network-status">Standard</div>
+                </div>
+            </div>
+            <div class="network-right">
+                <div class="network-change" id="ltc-change">Loading...</div>
+                <div class="network-value" id="ltc-value">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to randomly select an icon and apply the glowing effect
+        function glowRandomIcon() {
+            const icons = document.querySelectorAll('section .row i'); // Select all icons in the row
+            const randomIndex = Math.floor(Math.random() * icons.length); // Get a random index
+            icons.forEach(icon => icon.classList.remove('glowing')); // Remove the glow class from all icons
+            icons[randomIndex].classList.add('glowing'); // Add glow effect to the randomly selected icon
+        }
+
+        // Call the glowRandomIcon function every 3 seconds
+        setInterval(glowRandomIcon, 3000);
+        
+        // Coins data and fetch logic (same as before)
+        const coinsData = {
+            eth: { value: 0, change: 0 },
+            btc: { value: 0, change: 0 },
+            ltc: { value: 0, change: 0 }
+        };
+
+        function updateCoinsData() {
+            // Your fetch logic to update coins data goes here
+        }
+
+        setInterval(updateCoinsData, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+    "users": [
+      {
+        "name": "Vaibhav Sngh",
+        "meta_id": "0x7683D5b754b165f6a09ca237Eb7c8c3ab1BD2561",
+        "profile_picture": "vaibhav.png",
+        "transactions": {
+          "send": [],
+          "receive": []
+        }
+      },
+      {
+        "name": "Sajal Srivastava",
+        "meta_id": "0x7b1b0772ed9869cbecb439a9365d7231bd321b17",
+        "profile_picture": "sajal.jpg",
+        "transactions": {
+          "send": [],
+          "receive": []
+        }
+      }
+    ]
+  }
+  

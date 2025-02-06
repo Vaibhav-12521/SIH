@@ -1,0 +1,31 @@
+{
+    "users": [
+        {
+            "name": "sakshi Srivastava",
+            "meta_id": "0x7b1b0772ed9869cbecb439a9365d729389569",
+            "profile_picture": "sakshi.jpg",
+            "transactions": {
+                "send": [],
+                "receive": []
+            }
+        },
+        {
+            "name": "sakshi Srivastava",
+            "meta_id": "0x7b1b0772ed9869cbecb439a9365d729389569",
+            "profile_picture": "sakshi.jpg",
+            "transactions": {
+                "send": [],
+                "receive": []
+            }
+        },
+        {
+            "name": "sakshi Srivastava",
+            "meta_id": "0x7b1b0772ed9869cbecb439a9365d729389569",
+            "profile_picture": "sakshi.jpg",
+            "transactions": {
+                "send": [],
+                "receive": []
+            }
+        }
+    ]
+}
